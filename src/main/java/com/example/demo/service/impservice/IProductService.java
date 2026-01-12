@@ -13,14 +13,7 @@ public class IProductService implements ProductService {
         // Initialize with some products
      this.products = new java.util.ArrayList<>();
     }
-    @Override
-    public void checkProduct(String productId) {
-       boolean exists = products.stream()
-                .anyMatch(product -> product.getId().toString().equals(productId));
-    if(!exists) {
-       throw new ProductNotFoundException(productId);
-    }
-  }
+
   @Override
   public Product addProduct(ProductRequest productRequest) {
       Product product = new Product(productRequest.getId(), productRequest.getName(), productRequest.getPrice());

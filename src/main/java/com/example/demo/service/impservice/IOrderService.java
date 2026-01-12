@@ -15,15 +15,11 @@ import com.example.demo.service.UserService;
 import com.example.demo.service.ProductService;
 @Service
 public class IOrderService implements OrderService {
-    UserService userService;
-    ProductService productService;
   private List<Order> orders;  
   private List<User> users;    
-  public IOrderService(UserService userService, ProductService productService) {
+  public IOrderService() {
       this.orders = new java.util.ArrayList<>();
       this.users = new java.util.ArrayList<>();
-      this.userService = userService;
-      this.productService = productService;
   }
     @Override
   public Order placeOrder(OrderRequest orderRequest ) {
@@ -32,9 +28,6 @@ public class IOrderService implements OrderService {
       HashMap<String, Integer> productQuantities = new HashMap<>();
      for(ProductsRequest productsRequest : orderRequest.getProducts()) {
          String productId = productsRequest.getProductId();
-         System.out.println(productService.getAllProducts().size());
-         productService.checkProduct(productId);
-         userService.checkUser(orderRequest.getUserId());
          productQuantities.put(productId, productsRequest.getQuantity());
       }
       Order newOrder;
