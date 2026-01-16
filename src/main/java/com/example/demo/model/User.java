@@ -18,8 +18,8 @@ public class User extends BaseEntity{
     public void setEmail(String email) {
         this.email = email;
     }
-    public User(Long id,String name, String email, String role, String createdAt) {
-        super(role, id, createdAt);
+    public User(Long id,String name, String email, String role, String createdAt, String status) {
+        super(role, id, createdAt, status);
         this.name = name;
         this.email = email;
     }   

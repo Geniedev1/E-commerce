@@ -9,4 +9,5 @@ public interface UserService {
    public List<User> getAll(); 
    public List<User> getByRole(String role);
    public void checkUser(String userId);
+   public void activeUser(Long userId);
 }

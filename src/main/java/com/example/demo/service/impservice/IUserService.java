@@ -1,6 +1,7 @@
 package com.example.demo.service.impservice;
 import com.example.demo.model.User;
 import com.example.demo.service.UserService;
+import com.example.demo.service.validateentity.CheckerUser;
 import com.example.demo.model.Role;
 import com.example.demo.dto.CreateUserRequest;
 import com.example.demo.exception.UserNotFoundException;
@@ -9,14 +10,13 @@ import org.springframework.stereotype.Service;
 @Service
 public class IUserService implements UserService {
     private List<User> users;
-    public IUserService() {
+    private CheckerUser checkerUser;
+    public IUserService(CheckerUser checkerUser) {
+        this.checkerUser = checkerUser;
         this.users = new java.util.ArrayList<>();
     }
     public User create(CreateUserRequest requestUser) {        
-        if(requestUser.getName() == null || requestUser.getEmail() == null) {
-            throw new UserNotFoundException(requestUser.getId().toString());
-        }
-        User user = new User(requestUser.getId(), requestUser.getName(), requestUser.getEmail(),requestUser.getRole(),requestUser.getCreatedAt());
+        User user = new User(requestUser.getId(), requestUser.getName(), requestUser.getEmail(),requestUser.getRole(),requestUser.getCreatedAt(),requestUser.getStatus());
         users.add(user);
         return user;
     }   
@@ -46,4 +46,21 @@ public class IUserService implements UserService {
             throw new UserNotFoundException(userId);
         }   
     }
+    @Override
+    public void activeUser(Long userId)
+    {
+       checkerUser.CheckCanOrder(userId);
+        for(User user : users)
+        {
+            if(user.getId().toString().equals(Long.toString(userId))) {
+                if(user.getStatus().equals("ACTIVATE")) {
+                    throw new com.example.demo.exception.UserAlreadyActivateException(userId);
+                }  
+                user.setStatus("ACTIVATE");
+                return;
+            }
+        }
+       throw new UserNotFoundException(userId.toString());
+    }
+
 }
