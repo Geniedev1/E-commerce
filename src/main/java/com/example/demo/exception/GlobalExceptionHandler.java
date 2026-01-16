@@ -8,7 +8,11 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.http.HttpStatus;
 import com.example.demo.exception.UserNotFoundException;
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
+import com.example.demo.dto.ApiError;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.http.ResponseEntity;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
     @ExceptionHandler(UserNotFoundException.class)
@@ -57,13 +61,23 @@ public class GlobalExceptionHandler {
         );
     }
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse handleMethodArgumentNotValid(MethodArgumentNotValidException ex) {
-        String message = ex.getBindingResult().getAllErrors().get(0).getDefaultMessage();
-        return new ErrorResponse(
-            message,
-            "VALIDATION_ERROR",
-            LocalDateTime.now()
-        );
-    }
+    public ResponseEntity<?> handleValidationExceptions(MethodArgumentNotValidException ex) {
+        Map<String, String> errors = new HashMap<>();
+        ex.getBindingResult().getFieldErrors().forEach(error -> {
+            errors.put(error.getField(), error.getDefaultMessage());
+        });
+          ex.getBindingResult()
+      .getFieldErrors()
+      .forEach(error ->
+          errors.put(error.getField(), error.getDefaultMessage())
+      );
+  ApiError apiError = new ApiError(
+      "VALIDATION_ERROR",
+      "Invalid request data",
+      errors,
+      LocalDateTime.now()
+  );
+  return ResponseEntity.badRequest().body(
+        apiError
+    );    }
 }
