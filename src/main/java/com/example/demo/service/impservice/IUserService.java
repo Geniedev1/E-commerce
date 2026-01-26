@@ -1,66 +1,68 @@
 package com.example.demo.service.impservice;
 import com.example.demo.model.User;
+import com.example.demo.resposity.UserRepository;
 import com.example.demo.service.UserService;
 import com.example.demo.service.validateentity.CheckerUser;
 import com.example.demo.model.Role;
-import com.example.demo.dto.CreateUserRequest;
 import com.example.demo.exception.UserNotFoundException;
+import com.example.demo.mapper.UserMapper;
+
 import java.util.List;
 import org.springframework.stereotype.Service;
+import com.example.demo.dto.UserDTO;
+import com.example.demo.exception.UserAlreadyException;
+import java.util.ArrayList;
+import com.example.demo.exception.MailalreadySetException;
 @Service
 public class IUserService implements UserService {
-    private List<User> users;
+    UserRepository userRepository;
     private CheckerUser checkerUser;
-    public IUserService(CheckerUser checkerUser) {
+    public IUserService(UserRepository userRepository, CheckerUser checkerUser) {
+        this.userRepository = userRepository;   
         this.checkerUser = checkerUser;
-        this.users = new java.util.ArrayList<>();
     }
-    public User create(CreateUserRequest requestUser) {        
-        User user = new User(requestUser.getId(), requestUser.getName(), requestUser.getEmail(),requestUser.getRole(),requestUser.getCreatedAt(),requestUser.getStatus());
-        users.add(user);
-        return user;
+    @Override
+    public UserDTO create(UserDTO userDTO) {        
+        if(userRepository.existsByEmail(userDTO.getEmail())) {
+            throw new UserAlreadyException("User with email: " + userDTO.getEmail() + " already exists.");
+        }
+        User user = UserMapper.toEntity(userDTO);
+        userRepository.save(user);
+        return UserMapper.toDTO(user);
     }   
-    public List<User> getAll() {
-       return users;
+    @Override
+    public List<UserDTO> getAll() {
+       return userRepository.findAll().stream().map(user -> UserMapper.toDTO(user)).toList();
     }   
-    public List<User> getByRole(String role) {
-        return users.stream()
-                .filter(user -> user.getRole() != null && user.getRole().getAllRoles().contains(role))
+    @Override
+    public List<UserDTO> getByRole(Role role) {
+        return userRepository.findByRole(role).stream()
+                .filter(user -> user.getRole() != null && user.getRole().toString().equals(role))
+                .map(user -> UserMapper.toDTO(user))
                 .toList();
     }   
-    public User addMail(User user, String mail) {
-        if(user == null) {
-            throw new UserNotFoundException(user.getId().toString());
+    public void addMail(String email,Long userId) {
+        User user = userRepository.findById(userId).
+        orElseThrow(() -> new UserNotFoundException("User with id: " + userId + " not found."));
+        if(user.getEmail()!=null)
+        {
+            throw new MailalreadySetException("User with email: " + email + " already exists.");
         }
-        if(mail == null || mail.isEmpty()) {
-            throw new IllegalArgumentException("Mail cannot be null or empty");
-        }
-        user.setEmail(mail);
-        return user;
     }
     @Override
-    public void checkUser(String userId) {
-        boolean exists = users.stream()
-                .anyMatch(user -> user.getId().toString().equals(userId));
-        if(!exists) {
-            throw new UserNotFoundException(userId);
-        }   
+    public void checkUser(Long userId) {
+         if(!userRepository.existsById(userId)) {
+             throw new UserNotFoundException("User with id: " + userId + " not found.");
+         }  
     }
     @Override
-    public void activeUser(Long userId)
+    public void activateUser(Long userId)
     {
        checkerUser.CheckCanOrder(userId);
-        for(User user : users)
-        {
-            if(user.getId().toString().equals(Long.toString(userId))) {
-                if(user.getStatus().equals("ACTIVATE")) {
-                    throw new com.example.demo.exception.UserAlreadyActivateException(userId);
-                }  
-                user.setStatus("ACTIVATE");
-                return;
-            }
-        }
-       throw new UserNotFoundException(userId.toString());
+        User user = userRepository.findById(userId).
+        orElseThrow(() -> new UserNotFoundException("User with id: " + userId + " not found."));
+        user.activate();
+        userRepository.save(user);
     }
 
 }

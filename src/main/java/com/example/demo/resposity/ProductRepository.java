@@ -1,6 +1,9 @@
-// package com.example.demo.resposity;
-// import com.example.demo.model.Product;
-// public interface ProductRepository extends JPA {
-//     Product findByProductId(String productId);
-//   }   
+package com.example.demo.resposity;
+import com.example.demo.model.Product;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+@Repository
+public interface ProductRepository extends JpaRepository<Product,Long> {
+    boolean existsByNameIgnoreCase(String name);
+  }   
 

@@ -4,10 +4,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.service.ProductService;
 import com.example.demo.model.Product;
-import com.example.demo.dto.ProductRequest;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-
+import com.example.demo.dto.ProductDTO;
 import java.util.List;
 
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,11 +19,11 @@ public class ProductController {
         this.productService = productService;
     }
     @PostMapping("/addproduct")
-    public Product addProduct(@RequestBody ProductRequest productRequest) { 
-        return productService.addProduct(productRequest);
+    public ProductDTO addProduct(@RequestBody ProductDTO productDTO) { 
+        return productService.addProduct(productDTO);
  }
     @GetMapping("/getAllProduct")
-    public List<Product> getAllProduct() {
+    public List<ProductDTO> getAllProduct() {
         return productService.getAllProducts();
     }
     

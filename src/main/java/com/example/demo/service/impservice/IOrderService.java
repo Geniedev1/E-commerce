@@ -1,67 +1,54 @@
 package com.example.demo.service.impservice;
 import com.example.demo.model.Order;
 import com.example.demo.model.User;
+import com.example.demo.resposity.OrderRepository;
 import com.example.demo.service.OrderService;
 import com.example.demo.service.impservice.IUserService;
 import com.example.demo.service.impservice.IProductService;
 import com.example.demo.exception.OrderNotFoundException;
-import com.example.demo.dto.OrderRequest;
-import com.example.demo.dto.ProductsRequest;
+import com.example.demo.mapper.OrderMapper;
+import com.example.demo.dto.OrderDTO;
 import java.util.List;
 import java.util.HashMap;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
 import com.example.demo.service.UserService;
 import com.example.demo.service.ProductService;
+import com.example.demo.dto.UserDTO;
+import org.slf4j.LoggerFactory;
+import com.example.demo.mapper.UserMapper;
 @Service
 public class IOrderService implements OrderService {
-  private List<Order> orders;  
-  private List<User> users;    
-  public IOrderService() {
-      this.orders = new java.util.ArrayList<>();
-      this.users = new java.util.ArrayList<>();
+    OrderRepository orderRepository;
+  public IOrderService(OrderRepository orderRepository) {
+      this.orderRepository = orderRepository;   
+      
   }
     @Override
-  public Order placeOrder(OrderRequest orderRequest ) {
+  public OrderDTO placeOrder(OrderDTO orderDTO , UserDTO userDTO) {
     //   log.debug("Placing order for user: " + userId + " with products: " + productQuantities);
-      
-      HashMap<String, Integer> productQuantities = new HashMap<>();
-     for(ProductsRequest productsRequest : orderRequest.getProducts()) {
-         String productId = productsRequest.getProductId();
-         productQuantities.put(productId, productsRequest.getQuantity());
-      }
-      Order newOrder;
-      if(orders.size() != 0) {
-                 newOrder = new Order(Long.toString(Long.parseLong(orders.getLast().getOrderId()) + 1), orderRequest.getUserId(), productQuantities);
-      } else {
-                  newOrder = new Order("1", orderRequest.getUserId(), productQuantities);
-      }
-       orders.add(newOrder);
-       return newOrder;
+        
+        Order order = OrderMapper.toEntity(orderDTO);
+        order.setUser(UserMapper.toEntity(userDTO));
+        orderRepository.save(order);    
+        return OrderMapper.toDTO(order);
   } 
   @Override
-  public void cancelOrder(String orderId) {
+  public void cancelOrder(Long orderId) {
 //   log.debug("Cancelling order with ID: " + orderId);
-     for(Order order : orders) {
-         if(order.getOrderId().equals(orderId)) {
-             orders.remove(order);
-             return;
-            }
-     }
-        // log.info("Order with ID: " + orderId + " not found for cancellation.");
-        throw new OrderNotFoundException(orderId);
-    }
-     @Override 
-    public Order getOrderDetails(String orderId) {
-    //    log.debug("Fetching details for order ID: " + orderId);
-        for(Order order : orders) {
-            if(order.getOrderId().equals(orderId)) {
-                return order;
-            }
-        }
-        // log.info("Order with ID: " + orderId + " not found.");
-        throw new OrderNotFoundException(orderId);
+    if(!orderRepository.existsById(orderId)){
+        throw new OrderNotFoundException("Order with ID: " + orderId + " not found.");
+    } 
+    orderRepository.deleteById(orderId);
+//    log.info("Order with ID: " + orderId + " has been cancelled.");
   }
-
+     @Override 
+    public OrderDTO getOrderDetails(Long orderId) {
+    //    log.debug("Fetching details for order ID: " + orderId);
+          Order order = orderRepository.findById(orderId).
+          orElseThrow(() -> new OrderNotFoundException("Order with ID: " + orderId + " not found."));
+          
+          return OrderMapper.toDTO(order);
+        // log.info("Order with ID: " + orderId + " not found.");
+    }
 }
-
