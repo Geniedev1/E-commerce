@@ -80,4 +80,40 @@ public class GlobalExceptionHandler {
   return ResponseEntity.badRequest().body(
         apiError
     );    }
+    @ExceptionHandler(ProductAlreadyException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handleProductAlreadyException(ProductAlreadyException ex) {
+        return new ErrorResponse(
+            ex.getMessage(),
+            "PRODUCT_ALREADY_EXISTS",
+            LocalDateTime.now()
+        );
+    }
+    @ExceptionHandler(UserAlreadyException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handleUserAlreadyException(UserAlreadyException ex) {
+        return new ErrorResponse(
+            ex.getMessage(),
+            "USER_ALREADY_EXISTS",
+            LocalDateTime.now()
+        );
+    }
+    @ExceptionHandler(MailalreadySetException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handleMailalreadySetException(MailalreadySetException ex) {
+        return new ErrorResponse(
+            ex.getMessage(),
+            "MAIL_ALREADY_SET",
+            LocalDateTime.now()
+        );
+    }
+    @ExceptionHandler(OrderOverItemException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handleOrderOverItemException(OrderOverItemException ex) {
+        return new ErrorResponse(
+            ex.getMessage(),
+            "ORDER_OVER_ITEM_LIMIT",
+            LocalDateTime.now()
+        );
+    }
 }
