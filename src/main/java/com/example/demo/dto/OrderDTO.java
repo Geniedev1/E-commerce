@@ -6,7 +6,7 @@ import com.example.demo.model.Product;
 import java.util.List;
 public class OrderDTO {
      private Long id;
-     private List<OrderItemDTO> orderItemsDTO;
+     private List<OrderItemDTO> orderItemsDTO = new java.util.ArrayList<>();
         
      public OrderDTO (){
      }    

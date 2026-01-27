@@ -4,6 +4,7 @@ import com.example.demo.mapper.UserMapper;
 import com.example.demo.service.FirstOrderService;
 import com.example.demo.service.OrderService;
 import com.example.demo.model.Order;
+import com.example.demo.model.User;
 import com.example.demo.resposity.OrderRepository;
 import org.springframework.stereotype.Service;
 
@@ -14,9 +15,9 @@ public class IFirstOrderService implements FirstOrderService {
         this.orderRepository = orderRepository;
     }
     @Override
-    public void firstOrder(UserDTO userDTO) {
+    public void firstOrder(User user) {
         Order order = new Order();
-        order.setUser(UserMapper.toEntity(userDTO));
+        order.setUser(user);
         orderRepository.save(order);
     }    
 }

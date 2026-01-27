@@ -2,6 +2,7 @@ package com.example.demo.service.impservice;
 import com.example.demo.model.Order;
 import com.example.demo.model.User;
 import com.example.demo.resposity.OrderRepository;
+import com.example.demo.resposity.ProductRepository;
 import com.example.demo.service.OrderService;
 import com.example.demo.service.impservice.IUserService;
 import com.example.demo.service.impservice.IProductService;
@@ -20,11 +21,16 @@ import org.slf4j.LoggerFactory;
 import com.example.demo.mapper.UserMapper;
 import com.example.demo.dto.OrderItemDTO;
 import com.example.demo.dto.ProductDTO;
+import com.example.demo.exception.ProductNotFoundException;
+import com.example.demo.model.Product;
 @Service
 public class IOrderService implements OrderService {
     OrderRepository orderRepository;
-  public IOrderService(OrderRepository orderRepository) {
-      this.orderRepository = orderRepository;    
+    ProductRepository productRepository;
+  public IOrderService(OrderRepository orderRepository,ProductRepository productRepository) {
+      this.orderRepository = orderRepository;  
+        this.productRepository = productRepository;
+
   }
     @Override
   public OrderDTO placeOrder(OrderDTO orderDTO , UserDTO userDTO) {
@@ -55,9 +61,11 @@ public class IOrderService implements OrderService {
     }
     @Override
     public OrderDTO addItem(ProductDTO productDTO,int quantity, UserDTO userDTO) {
-        Order order = orderRepository.findById(userDTO.getId()).
-        orElseThrow(() -> new OrderNotFoundException("Order for User ID: " + userDTO.getId() + " not found."));
-        order.addItem(ProductMapper.toEntity(productDTO), quantity);
+        List<Order> listorder = orderRepository.findByUserId(userDTO.getId());
+        Order order = listorder.get(0);
+        Product product = productRepository.findById(productDTO.getId()).
+        orElseThrow(() -> new ProductNotFoundException("Product with ID: " + productDTO.getId() + " not found."));
+        order.addItem(product, quantity);
         orderRepository.save(order);
         return OrderMapper.toDTO(order);
     }

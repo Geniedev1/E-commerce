@@ -31,9 +31,10 @@ public class IUserService implements UserService {
             throw new UserAlreadyException("User with email: " + userDTO.getEmail() + " already exists.");
         }
         User user = UserMapper.toEntity(userDTO);
-        userRepository.save(user);
-        firstOrderService.firstOrder(userDTO);
-        return UserMapper.toDTO(user);
+         User usersave = userRepository.save(user);
+         userDTO.setId(usersave.getId());
+        firstOrderService.firstOrder(usersave);
+        return UserMapper.toDTO(usersave);
     }   
     @Override
     public List<UserDTO> getAll() {
