@@ -60,8 +60,11 @@ public class IOrderService implements OrderService {
         // log.info("Order with ID: " + orderId + " not found.");
     }
     @Override
-    public OrderDTO addItem(ProductDTO productDTO,int quantity, UserDTO userDTO) {
-        List<Order> listorder = orderRepository.findByUserId(userDTO.getId());
+    public OrderDTO addItem(ProductDTO productDTO,int quantity,Long userId) {
+        List<Order> listorder = orderRepository.findByUserId(userId);
+        if(listorder.isEmpty()) {
+            throw new OrderNotFoundException("Order for User ID: " + userId + " not found.");
+        }
         Order order = listorder.get(0);
         Product product = productRepository.findById(productDTO.getId()).
         orElseThrow(() -> new ProductNotFoundException("Product with ID: " + productDTO.getId() + " not found."));

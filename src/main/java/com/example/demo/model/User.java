@@ -27,6 +27,13 @@ public  class User {
     private  UserStatus status;
     private String name;
     private String email;
+    private String password;
+    public String getPassword() {
+        return password;
+    }
+    public void setPassword(String password) {
+        this.password = password;
+    }
     public Role getRole() {
         return role;
     }

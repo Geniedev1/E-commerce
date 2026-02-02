@@ -17,11 +17,6 @@ public class UserController {
     public UserController(UserService userService) {
         this.userService = userService;
     }
-@PostMapping("/users")
-@ResponseStatus(HttpStatus.CREATED)
-public UserDTO createUser(@Valid @RequestBody UserDTO userDTO) {
-        return userService.create(userDTO);
-  }
 @PostMapping("/users/{id}/activate")
 @ResponseStatus(HttpStatus.NO_CONTENT)
 public void activateUser(@PathVariable Long id) {

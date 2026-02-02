@@ -12,6 +12,7 @@ spring:
       hibernate:
         format_sql: true
     database-platform: org.hibernate.dialect.MySQL8Dialect
-  jwt:
-    secret: my-super-secret-key-123456789
-    expiration: 3600000 # 1 giờ
+
+jwt:
+  secret:  4VYtYc8Pz8l7e5K9F7zY1zq+ZkE3YH9x2mAq0J5Z8Ck=32423dfsdfhgfdfdgdf345435fdgdsfdsf56456dfghdfg
+  expiration: 86400000

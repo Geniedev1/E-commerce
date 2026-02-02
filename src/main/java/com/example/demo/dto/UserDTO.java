@@ -11,7 +11,17 @@ public class UserDTO {
     // Getters and Setters
     private String createdAt;
     private Role role;
+    private String password;
     public UserDTO() {
+    }
+    public UserDTO(Long id, String name, String email, UserStatus status, String createdAt, Role role , String password) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.status = status;
+        this.createdAt = createdAt;
+        this.role = role;
+        this.password = password;
     }
     public UserDTO(Long id, String name, String email, UserStatus status, String createdAt, Role role) {
         this.id = id;
@@ -56,5 +66,11 @@ public class UserDTO {
     }
     public void setRole(Role role) {
         this.role = role;
+    }
+    public String getPassword() {
+        return password;
+    }
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

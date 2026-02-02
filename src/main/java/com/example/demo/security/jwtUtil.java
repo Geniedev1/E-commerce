@@ -1,3 +1,4 @@
+package com.example.demo.security;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.JwtException;
@@ -8,6 +9,7 @@ import org.springframework.beans.factory.annotation.Value;
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Date;
+import org.springframework.security.core.userdetails.UserDetails;
 @Component
 public class JwtUtil {
 
@@ -21,7 +23,7 @@ public class JwtUtil {
         return Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
     }
 
-    // ✅ TẠO TOKEN
+    //  TẠO TOKEN
     public String generateToken(UserDetails userDetails) {
         return Jwts.builder()
                 .setSubject(userDetails.getUsername())
@@ -31,12 +33,12 @@ public class JwtUtil {
                 .compact();
     }
 
-    // ✅ LẤY USERNAME
+    //  LẤY USERNAME
     public String getUsername(String token) {
         return getClaims(token).getSubject();
     }
 
-    // ✅ VALIDATE TOKEN
+    //  VALIDATE TOKEN
     public boolean validateToken(String token) {
         try {
             getClaims(token);

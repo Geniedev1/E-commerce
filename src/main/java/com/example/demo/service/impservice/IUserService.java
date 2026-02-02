@@ -9,6 +9,8 @@ import com.example.demo.exception.UserNotFoundException;
 import com.example.demo.mapper.UserMapper;
 
 import java.util.List;
+
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.example.demo.dto.UserDTO;
 import com.example.demo.exception.UserAlreadyException;
@@ -19,11 +21,13 @@ public class IUserService implements UserService {
     private UserRepository userRepository;
     private CheckerUser checkerUser;
     private FirstOrderService firstOrderService;
+    private PasswordEncoder paswordEncoder ;
 
-    public IUserService(UserRepository userRepository, CheckerUser checkerUser, FirstOrderService firstOrderService) {
+    public IUserService(UserRepository userRepository, CheckerUser checkerUser, FirstOrderService firstOrderService, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;   
         this.checkerUser = checkerUser;
         this.firstOrderService = firstOrderService;
+        this.paswordEncoder = passwordEncoder;
     }
     @Override
     public UserDTO create(UserDTO userDTO) {        
@@ -31,6 +35,7 @@ public class IUserService implements UserService {
             throw new UserAlreadyException("User with email: " + userDTO.getEmail() + " already exists.");
         }
         User user = UserMapper.toEntity(userDTO);
+        user.setPassword(paswordEncoder.encode(user.getPassword()));
          User usersave = userRepository.save(user);
          userDTO.setId(usersave.getId());
         firstOrderService.firstOrder(usersave);

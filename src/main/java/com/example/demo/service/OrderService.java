@@ -10,5 +10,5 @@ public interface OrderService {
  public OrderDTO placeOrder(OrderDTO orderRequest, UserDTO userDTO);
  public void cancelOrder(Long orderId);
  public OrderDTO getOrderDetails(Long orderId);
- public OrderDTO addItem(ProductDTO productDTO, int quantity, UserDTO userDTO);
+ public OrderDTO addItem(ProductDTO productDTO, int quantity, Long userId);
 } 
