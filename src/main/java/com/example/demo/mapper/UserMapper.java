@@ -2,6 +2,10 @@ package com.example.demo.mapper;
 import com.example.demo.model.User;
 import com.example.demo.model.UserStatus;
 import com.example.demo.dto.UserDTO;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 import com.example.demo.dto.AdminCreateUserReponse;
 import com.example.demo.dto.AdminCreateUserRequest;
 import com.example.demo.dto.AuthRequest;
@@ -31,6 +35,8 @@ public class UserMapper {
         User user = new User();
         user.setEmail(authRequest.getEmail());
         user.setPassword(authRequest.getPassword());
+        user.setName(authRequest.getUsername());
+        user.setCreatedAt(LocalDateTime.now().toString());
         return user;
     }
 public static User AdminCreateUserRequesttoEntity(AdminCreateUserRequest adminCreateUserRequest) {

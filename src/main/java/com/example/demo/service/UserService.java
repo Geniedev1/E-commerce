@@ -2,9 +2,9 @@ package com.example.demo.service;
 import com.example.demo.model.User;
 import java.util.List;
 
+import com.example.demo.dto.AdminCreateUserReponse;
 import com.example.demo.dto.AdminCreateUserRequest;
 import com.example.demo.model.Role;
-import com.example.demo.dto.AdminCreateUserReponse;
 import com.example.demo.dto.AuthRequest;
 import com.example.demo.dto.UserDTO;
 public interface UserService {

@@ -116,4 +116,13 @@ public class GlobalExceptionHandler {
             LocalDateTime.now()
         );
     }
+    @ExceptionHandler(UserNotAuthticationException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public ErrorResponse handleUserNotAuthticationException(UserNotAuthticationException ex) {
+        return new ErrorResponse(
+            ex.getMessage(),
+            "USER_NOT_AUTHENTICATED",
+            LocalDateTime.now()
+        );
+    }
 }
