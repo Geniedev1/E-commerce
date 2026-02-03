@@ -22,12 +22,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @RestController
+@RequestMapping("/api/orders")
 public class OrderController {
     OrderService orderService;
     public OrderController(OrderService orderService) {
         this.orderService = orderService;
     }  
-@PostMapping("/order")
+@PostMapping
 public OrderDTO order(@RequestBody ProductDTO productDTO,@RequestParam int quantity,@AuthenticationPrincipal UserDetailsimpl userDetails) {
     //TODO: process POST request
    return  orderService.addItem(productDTO, quantity, userDetails.getId());

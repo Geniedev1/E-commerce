@@ -1,5 +1,6 @@
 package com.example.demo.service.impservice;
 import com.example.demo.model.User;
+import com.example.demo.model.UserStatus;
 import com.example.demo.resposity.UserRepository;
 import com.example.demo.service.FirstOrderService;
 import com.example.demo.service.UserService;
@@ -12,6 +13,8 @@ import java.util.List;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import com.example.demo.dto.AdminCreateUserRequest;
+import com.example.demo.dto.AuthRequest;
 import com.example.demo.dto.UserDTO;
 import com.example.demo.exception.UserAlreadyException;
 import java.util.ArrayList;
@@ -30,17 +33,27 @@ public class IUserService implements UserService {
         this.paswordEncoder = passwordEncoder;
     }
     @Override
-    public UserDTO create(UserDTO userDTO) {        
-        if(userRepository.existsByEmail(userDTO.getEmail())) {
-            throw new UserAlreadyException("User with email: " + userDTO.getEmail() + " already exists.");
+    public void registerUser(AuthRequest authRequest) {        
+        if(userRepository.existsByEmail(authRequest.getEmail())) {
+            throw new UserAlreadyException("User with email: " + authRequest.getEmail() + " already exists.");
         }
-        User user = UserMapper.toEntity(userDTO);
+        User user = UserMapper.AuthtoEntity(authRequest);
+        user.setStatus(UserStatus.PENDING);
+        user.setRole(Role.USER);
         user.setPassword(paswordEncoder.encode(user.getPassword()));
-         User usersave = userRepository.save(user);
-         userDTO.setId(usersave.getId());
+        User usersave = userRepository.save(user);
         firstOrderService.firstOrder(usersave);
-        return UserMapper.toDTO(usersave);
+        return;
     }   
+    @Override
+    public void createUserbyAdmin(AdminCreateUserRequest adminCreateUserRequest) {
+        if(userRepository.existsByEmail(adminCreateUserRequest.getEmail())) {
+            throw new UserAlreadyException("User with email: " + adminCreateUserRequest.getEmail() + " already exists.");
+        }
+        User user = UserMapper.AdminCreateUserRequesttoEntity(adminCreateUserRequest);
+        userRepository.save(user);
+        return;
+    }
     @Override
     public List<UserDTO> getAll() {
        return userRepository.findAll().stream().map(user -> UserMapper.toDTO(user)).toList();
@@ -75,5 +88,6 @@ public class IUserService implements UserService {
         user.activate();
         userRepository.save(user);
     }
+
     
 }

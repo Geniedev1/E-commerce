@@ -46,8 +46,8 @@ public SecurityConfig(
             //  Phân quyền
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers(
-                    "/auth/login",
-                    "/auth/register"
+                    "api/auth/login",
+                    "api/auth/register"
                 ).permitAll()
 
                 .requestMatchers("/admin/**").hasRole("ADMIN")

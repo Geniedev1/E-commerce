@@ -23,7 +23,7 @@ import com.example.demo.dto.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetailsService;
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("api/auth")
 public class AuthController {
     private UserService userService;
     private final AuthenticationManager authenticationManager;
@@ -53,8 +53,9 @@ public class AuthController {
     }
 @PostMapping("/register")
 @ResponseStatus(HttpStatus.CREATED)
-public UserDTO createUser(@Valid @RequestBody UserDTO userDTO) {
-        return userService.create(userDTO);
+public void createUser(@Valid @RequestBody AuthRequest authRequest) {
+         userService.registerUser(authRequest);
+         return;
   }
     
 }

@@ -17,9 +17,4 @@ public class UserController {
     public UserController(UserService userService) {
         this.userService = userService;
     }
-@PostMapping("/users/{id}/activate")
-@ResponseStatus(HttpStatus.NO_CONTENT)
-public void activateUser(@PathVariable Long id) {
-    userService.activateUser(id);
-  }
 }
