@@ -76,7 +76,7 @@ public class AuthController {
 @PostMapping("/register")
 @ResponseStatus(HttpStatus.CREATED)
 public void createUser(@Valid @RequestBody AuthRequest authRequest) {
-         userService.   registerUser(authRequest);
+         userService.registerUser(authRequest);
          return;
   }
     
