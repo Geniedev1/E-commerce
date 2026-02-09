@@ -1,14 +1,13 @@
-package com.example.demo.service.impservice;
+package com.example.demo.service.impl;
 import com.example.demo.model.User;
 import com.example.demo.model.UserStatus;
-import com.example.demo.resposity.UserRepository;
-import com.example.demo.service.FirstOrderService;
-import com.example.demo.service.UserService;
-import com.example.demo.service.validateentity.CheckerUser;
+import com.example.demo.repository.UserRepository;
 import com.example.demo.model.Role;
 import com.example.demo.exception.UserNotFoundException;
 import com.example.demo.mapper.UserMapper;
-
+import com.example.demo.service.contract.UserService;
+import com.example.demo.service.contract.FirstOrderService;
+import com.example.demo.service.contract.validateentity.CheckerUser;
 import java.util.List;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -22,13 +21,13 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import com.example.demo.exception.MailalreadySetException;
 @Service
-public class IUserService implements UserService {
+public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
     private CheckerUser checkerUser;
     private FirstOrderService firstOrderService;
     private PasswordEncoder paswordEncoder ;
 
-    public IUserService(UserRepository userRepository, CheckerUser checkerUser, FirstOrderService firstOrderService, PasswordEncoder passwordEncoder) {
+    public UserServiceImpl(UserRepository userRepository, CheckerUser checkerUser, FirstOrderService firstOrderService, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;   
         this.checkerUser = checkerUser;
         this.firstOrderService = firstOrderService;

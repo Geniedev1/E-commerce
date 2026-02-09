@@ -1,10 +1,10 @@
-package com.example.demo.service.impservice.implvalidateentity;
+package com.example.demo.service.impl.implvalidateentity;
 import org.springframework.stereotype.Component;
 import com.example.demo.model.User;
 import com.example.demo.exception.UserNotFoundException;
-import com.example.demo.service.validateentity.CheckerUser;
+import com.example.demo.service.contract.validateentity.CheckerUser;
 @Component  
-public class ICheckerUser implements CheckerUser {
+public class CheckerUserImpl implements CheckerUser {
     @Override
     public void CheckCanOrder(Long userId) {
             if(userId == null || userId <= 0) {

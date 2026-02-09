@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.example.demo.model.Order;
 import com.example.demo.model.Role;
 import com.example.demo.model.UserStatus;
-import com.example.demo.service.OrderService;
+import com.example.demo.service.contract.OrderService;
 import com.example.demo.dto.OrderDTO;
 import com.example.demo.dto.ProductDTO;
 import com.example.demo.dto.UserDTO;
@@ -29,9 +29,11 @@ public class OrderController {
         this.orderService = orderService;
     }  
 @PostMapping
+@ResponseStatus(HttpStatus.CREATED)
 public OrderDTO order(@RequestBody ProductDTO productDTO,@RequestParam int quantity,@AuthenticationPrincipal UserDetailsimpl userDetails) {
     //TODO: process POST request
    return  orderService.addItem(productDTO, quantity, userDetails.getId());
     
   }
 }
+//f

@@ -1,19 +1,19 @@
-package com.example.demo.service.impservice;
+package com.example.demo.service.impl;
 import com.example.demo.model.Product;
-import com.example.demo.service.ProductService;
+import com.example.demo.repository.ProductRepository;
 import com.example.demo.exception.ProductNotFoundException;
 import com.example.demo.mapper.ProductMapper;
-
+import com.example.demo.service.contract.ProductService;
 import java.util.List;
 import org.springframework.stereotype.Service;
-import com.example.demo.resposity.ProductRepository;
+
 import com.example.demo.dto.ProductDTO;
 import java.util.ArrayList;
 import com.example.demo.exception.ProductAlreadyException;
 @Service
-public class IProductService implements ProductService {
+public class ProductServiceImpl implements ProductService {
     ProductRepository productRepository;
-    public IProductService(ProductRepository productRepository) {
+    public ProductServiceImpl(ProductRepository productRepository) {
         // Initialize with some products
      this.productRepository = productRepository;
     }

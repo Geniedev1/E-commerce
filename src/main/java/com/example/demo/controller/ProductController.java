@@ -2,7 +2,7 @@ package com.example.demo.controller;
 
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.demo.service.ProductService;
+import com.example.demo.service.contract.ProductService;
 import com.example.demo.model.Product;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -11,10 +11,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.example.demo.dto.ProductDTO;
 import java.util.List;
 
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
 @RestController
 @RequestMapping("/api/products")
 public class ProductController {
@@ -22,14 +22,16 @@ public class ProductController {
     public ProductController(ProductService productService) {
         this.productService = productService;
     }
-    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public ProductDTO addProduct(@RequestBody ProductDTO productDTO) { 
         return productService.addProduct(productDTO);
  }
     @GetMapping
+    @ResponseStatus(HttpStatus.OK)
     public List<ProductDTO> getAllProduct() {
         return productService.getAllProducts();
     }
     
 }
+//f

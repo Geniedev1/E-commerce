@@ -20,7 +20,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import com.example.demo.service.UserService;
+import com.example.demo.service.contract.UserService;
 import jakarta.validation.Valid;
 import com.example.demo.dto.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,8 +76,9 @@ public class AuthController {
 @PostMapping("/register")
 @ResponseStatus(HttpStatus.CREATED)
 public void createUser(@Valid @RequestBody AuthRequest authRequest) {
-         userService.registerUser(authRequest);
+         userService.   registerUser(authRequest);
          return;
   }
     
 }
+//f

@@ -1,4 +1,4 @@
-package com.example.demo.service;
+package com.example.demo.service.contract;
 import java.util.List;
 import java.util.Map;
 import com.example.demo.dto.UserDTO;

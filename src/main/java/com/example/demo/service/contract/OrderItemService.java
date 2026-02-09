@@ -1,4 +1,4 @@
-package com.example.demo.service;
+package com.example.demo.service.contract;
 
 import com.example.demo.dto.ProductDTO;
 

@@ -1,7 +1,7 @@
 package com.example.demo.controller;
 import com.example.demo.mapper.UserMapper;
 import com.example.demo.model.User;
-import com.example.demo.service.UserService;
+import com.example.demo.service.contract.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,3 +18,4 @@ public class UserController {
         this.userService = userService;
     }
 }
+//f

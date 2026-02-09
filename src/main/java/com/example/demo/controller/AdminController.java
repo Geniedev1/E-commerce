@@ -7,9 +7,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import com.example.demo.service.UserService;
 import com.example.demo.dto.AdminCreateUserRequest;
 import org.springframework.web.bind.annotation.RequestBody;
+import com.example.demo.service.contract.UserService;
 @RestController
 @RequestMapping("api/admin")
 @PreAuthorize("hasRole('ADMIN')")
@@ -30,3 +30,4 @@ public void createUserbyAdmin(@RequestBody AdminCreateUserRequest adminCreateUse
     return;
   }
 }
+//f

@@ -1,4 +1,4 @@
-package com.example.demo.resposity;
+package com.example.demo.repository;
 import com.example.demo.model.User;
 import com.example.demo.model.Role;
 import java.util.List;

@@ -1,33 +1,23 @@
-package com.example.demo.service.impservice;
+package com.example.demo.service.impl;
 import com.example.demo.model.Order;
-import com.example.demo.model.User;
-import com.example.demo.resposity.OrderRepository;
-import com.example.demo.resposity.ProductRepository;
-import com.example.demo.service.OrderService;
-import com.example.demo.service.impservice.IUserService;
-import com.example.demo.service.impservice.IProductService;
+import com.example.demo.repository.OrderRepository;
+import com.example.demo.repository.ProductRepository;
 import com.example.demo.exception.OrderNotFoundException;
 import com.example.demo.mapper.OrderMapper;
-import com.example.demo.mapper.ProductMapper;
 import com.example.demo.dto.OrderDTO;
 import java.util.List;
-import java.util.HashMap;
-import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
-import com.example.demo.service.UserService;
-import com.example.demo.service.ProductService;
 import com.example.demo.dto.UserDTO;
-import org.slf4j.LoggerFactory;
 import com.example.demo.mapper.UserMapper;
-import com.example.demo.dto.OrderItemDTO;
 import com.example.demo.dto.ProductDTO;
 import com.example.demo.exception.ProductNotFoundException;
 import com.example.demo.model.Product;
+import com.example.demo.service.contract.OrderService;
 @Service
-public class IOrderService implements OrderService {
+public class OrderServiceImpl implements OrderService {
     OrderRepository orderRepository;
     ProductRepository productRepository;
-  public IOrderService(OrderRepository orderRepository,ProductRepository productRepository) {
+  public OrderServiceImpl(OrderRepository orderRepository,ProductRepository productRepository) {
       this.orderRepository = orderRepository;  
         this.productRepository = productRepository;
 
