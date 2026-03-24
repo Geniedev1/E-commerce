@@ -1,0 +1,13 @@
+{
+  "settings": {
+    "number_of_shards": 1
+  },
+  "mappings": {
+    "properties": {
+     "id"   : { "type": "long" }, 
+      "name": { "type": "text" },
+      "price": { "type": "double" }
+
+    }
+  }
+}
