@@ -7,8 +7,8 @@ public class FinalPriceImpl implements FinalPrice {
         this.productService = productService;
     }
     @Override
-    public double calculateFinalPrice(Long orderId) {
-      return productService.getPrice(orderId);
+    public double calculateFinalPrice(Long productId) {
+      return productService.getPrice(productId);
     }
     
 }

@@ -13,6 +13,7 @@ import com.example.demo.repository.ProductRepository;
 import com.example.demo.service.ProductSearchService;
 import com.example.demo.service.ProductService;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -47,7 +48,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    @Cacheable(value = "products")
+    @Cacheable(value = "products_pages", key = "#page + '-' + #size")
     public PageResponse<ProductDTO> getAllProducts(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<Product> products = productRepository.findAll(pageable);
@@ -60,7 +61,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    @Cacheable(value = "products", key = "#productId")
+    @Cacheable(value = "products_price", key = "#productId")
     public double getPrice(Long productId) {
         return productRepository.findPriceById(productId);
     }
@@ -76,6 +77,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @CacheEvict(value = "products_price,products_pages", key = "#productId")
     @Transactional
     public void removeProduct(Long productId) {
         if (!productRepository.existsById(productId)) {
@@ -86,6 +88,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @CachePut(value = "products_price", key = "#productDTO.id")
     @Transactional
     public ProductDTO updateProduct(ProductDTO productDTO) {
         if (!productRepository.existsById(productDTO.getId())) {
@@ -97,4 +100,5 @@ public class ProductServiceImpl implements ProductService {
         eventSend.toUpdateProduct(product);
         return productDTO;
     }
+    
 }
