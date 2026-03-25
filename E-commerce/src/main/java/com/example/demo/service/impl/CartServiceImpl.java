@@ -19,6 +19,7 @@ import com.example.demo.repository.CartItemWithPriceProjection;
 import com.example.demo.repository.CartRepository;
 import com.example.demo.service.CartService;
 import com.example.demo.service.ProductService;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class CartServiceImpl implements CartService {
@@ -49,6 +50,7 @@ public class CartServiceImpl implements CartService {
         return cartDTO;
     }
     @Override
+    @Transactional
     public void addToCart(Long userId, Long productId, int quantity) {
         Cart cart = getOrCreateCart(userId);
         if (!productService.existsById(productId)) {
@@ -65,6 +67,7 @@ public class CartServiceImpl implements CartService {
                 });
     }
     @Override
+    @Transactional
     public void removeFromCart(Long userId, Long cartItemId) {
         Cart cart = cartRepository.findByUserId(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("Cart not found for user id: " + userId));
@@ -76,6 +79,7 @@ public class CartServiceImpl implements CartService {
         cartItemRepository.delete(cartItem);
     }
     @Override
+    @Transactional
     public void clearCart(Long userId)
     {
         Cart cart = cartRepository.findByUserId(userId).
@@ -85,6 +89,7 @@ public class CartServiceImpl implements CartService {
          throw new ResourceNotFoundException("Cart empty");
     }
     @Override
+    @Transactional
     public void updateCartItemQuantity(Long userId,Long cartItemId,int quantity)
     {
         Cart cart = cartRepository.findByUserId(userId).
@@ -94,10 +99,6 @@ public class CartServiceImpl implements CartService {
         if(!cartItem.getCartId().equals(cart.getId()))
         {
             throw new ResourceNotFoundException("cart item does not belong to user's cart");
-        }
-        if(cartItem == null)
-        {
-            throw new ResourceNotFoundException("not item to update");
         }
         cartItem.setQuantity(quantity);
         cartItemRepository.save(cartItem);

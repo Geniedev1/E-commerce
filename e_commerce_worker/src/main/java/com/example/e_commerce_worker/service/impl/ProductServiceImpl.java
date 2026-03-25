@@ -22,6 +22,9 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public void handleUpdateProduct(ProductUpdateEvent event) {
         ProductDocument productDocument = productRepository.findById(String.valueOf(event.getId())).orElse(null);
+        if (productDocument == null) {
+            throw new IllegalArgumentException("Product not found with id: " + event.getId());
+        }
         productDocument.setPrice(event.getPrice());
         productRepository.save(productDocument);
     }

@@ -14,7 +14,9 @@ public class ProductSearchRepository {
     public ProductSearchRepository(ElasticsearchOperations elasticsearchOperations) {
         this.elasticsearchOperations = elasticsearchOperations;
     }
-
+//query gần đúng với productName, với field name của document trong ES, và sử dụng pageable để phân trang kết quả trả về.
+//SearchHits<ProductDTO> sẽ chứa các kết quả tìm kiếm, bao gồm thông tin về sản phẩm và điểm số liên quan
+// đó là lý do nó trả về SearchHits<ProductDTO> thay vì List<ProductDTO>, để có thể truy cập thêm thông tin về điểm số và các metadata khác của kết quả tìm kiếm.Khác với Page vì 2 đối tượng này trả về metadata nhưng khác nhau
     public  SearchHits<ProductDTO> searchProducts(String productName,int page, int size) {
         Query query = NativeQuery.builder()
             .withQuery(q -> q

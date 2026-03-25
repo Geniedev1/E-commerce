@@ -65,7 +65,6 @@ public class UserServiceImpl implements UserService {
     @Cacheable(value = "usersByRole", key = "#role")
     public List<UserDTO> getByRole(Role role) {
         return userRepository.findByRole(role).stream()
-                .filter(user -> user.getRole() != null && user.getRole().toString().equals(role))
                 .map(UserMapper::toDTO)
                 .toList();
     }

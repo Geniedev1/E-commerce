@@ -23,18 +23,16 @@ public class OrderController {
         this.orderService = orderService;
     }
 
-    @PostMapping("/items")
-    public ApiResponse<Void> addOrderItem(@PathVariable Long orderId, 
-                                          @RequestParam Long productId, 
-                                          @RequestParam int quantity,
-                                          @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    @PostMapping("/{orderId}/items")
+    public ApiResponse<Void> addOrderItem(@PathVariable Long orderId,
+                                          @RequestParam Long productId,
+                                          @RequestParam int quantity) {
          orderService.addOrderItem(orderId, productId, quantity);
          return new ApiResponse<>("success", "Order item added successfully", null);
     }
 
     @DeleteMapping("/items/{orderItemId}")
-    public ApiResponse<Void> removeOrderItem(@PathVariable Long orderItemId,
-                                             @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public ApiResponse<Void> removeOrderItem(@PathVariable Long orderItemId) {
         orderService.removeOrderItem(orderItemId);
         return new ApiResponse<>("success", "Order item removed successfully", null);
     }
@@ -45,9 +43,9 @@ public class OrderController {
          return new ApiResponse<>("success", "Order placed successfully", orderDTO);
     }
 
-    @PostMapping("/cancel")
-    public ApiResponse<Void> cancelOrder(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-         orderService.cancelOrder(userDetails.getId());
+        @PostMapping("/{orderId}/cancel")
+        public ApiResponse<Void> cancelOrder(@PathVariable Long orderId) {
+            orderService.cancelOrder(orderId);
          return new ApiResponse<>("success", "Order cancelled successfully", null);
     }
 }

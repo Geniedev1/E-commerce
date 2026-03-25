@@ -1,6 +1,6 @@
 package com.example.e_commerce_worker.event.product;
 
-public class ProductUpdateEvent {
+public class ProductUpdateEvent extends Event {
     private Long id;
     private double price;
     public ProductUpdateEvent() {

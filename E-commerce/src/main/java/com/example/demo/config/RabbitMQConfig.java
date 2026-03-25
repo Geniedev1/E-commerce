@@ -1,11 +1,13 @@
 package com.example.demo.config;
 
+import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
+import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.amqp.support.converter.MessageConverter;
-import org.springframework.amqp.rabbit.connection.ConnectionFactory;
+//- Architecture: Đây là producer nó chỉ quan tâm đẩy message vào exchange nào (PRODUCT_EXCHANGE) với loại routing key nào không 
+// quan tâm là đưa cho ai chỉ biết là đưa loại message này (routing key ) thuộc vùng này(EXCHANGE) vào MQ
 @Configuration
 public class RabbitMQConfig {
     public static final String PRODUCT_EXCHANGE = "product_exchange";

@@ -13,6 +13,7 @@ import com.example.demo.repository.OrderRepository;
 import com.example.demo.service.CartService;
 import com.example.demo.service.FinalPrice;
 import com.example.demo.service.OrderService;
+import org.springframework.transaction.annotation.Transactional;
 @Service
 public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepository;
@@ -26,6 +27,7 @@ public class OrderServiceImpl implements OrderService {
         this.cartService = cartService;
     }
     @Override
+    @Transactional
     public OrderDTO checkout(Long userId) {
         //   log.debug("Placing order for user: " + userId + " with products: " + productQuantities);
         Order order = new Order();
@@ -49,6 +51,7 @@ orderItemRepository.saveAll(items);
     }
 
     @Override
+    @Transactional
     public void cancelOrder(Long orderId) {
 //   log.debug("Cancelling order with ID: " + orderId); 
         if (checkValidateOrder(orderId)) {
@@ -59,6 +62,7 @@ orderItemRepository.saveAll(items);
     }
 
     @Override
+    @Transactional
     public void addOrderItem(Long orderId, Long productId, int quantity) {
         if (checkValidateOrder(orderId)) {
             OrderItem orderItem = new OrderItem();
@@ -71,6 +75,7 @@ orderItemRepository.saveAll(items);
     }
 
     @Override
+    @Transactional
     public void removeOrderItem(Long orderItemId) {
         Order order = orderRepository.findOrderByOrderItemId(orderItemId);
         if (checkValidateOrder(order.getId())) {

@@ -1,7 +1,9 @@
 package com.example.e_commerce_worker.consumer.product;
-import org.springframework.stereotype.Component;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import org.springframework.stereotype.Component;
+
 import com.example.e_commerce_worker.config.RabbitMQconfig;
+import com.example.e_commerce_worker.event.product.Event;
 import com.example.e_commerce_worker.event.product.ProductAddEvent;
 import com.example.e_commerce_worker.event.product.ProductDeleteEvent;
 import com.example.e_commerce_worker.event.product.ProductUpdateEvent;
@@ -13,15 +15,17 @@ public class ConsumerProduct {
         this.productService = productService;
     }
     @RabbitListener(queues = RabbitMQconfig.PRODUCT_QUEUE)
-    public void receiveAddProduct(ProductAddEvent productEvent) {
-        productService.handleAddProduct(productEvent);
+    public void receive(Event event) {
+        if (event instanceof ProductAddEvent) {
+            ProductAddEvent addEvent = (ProductAddEvent) event;
+            productService.handleAddProduct(addEvent);
+        } else if (event instanceof ProductUpdateEvent) {
+            ProductUpdateEvent updateEvent = (ProductUpdateEvent) event;
+            productService.handleUpdateProduct(updateEvent);
+        } else if (event instanceof ProductDeleteEvent) {
+            ProductDeleteEvent deleteEvent = (ProductDeleteEvent) event;
+            productService.handleDeleteProduct(deleteEvent);
+        }
     }
-    @RabbitListener(queues = RabbitMQconfig.PRODUCT_QUEUE)  
-    public void receiveUpdateProduct(ProductUpdateEvent productEvent) {
-        productService.handleUpdateProduct(productEvent);
-    }
-    @RabbitListener(queues = RabbitMQconfig.PRODUCT_QUEUE)
-    public void receiveDeleteProduct(ProductDeleteEvent productEvent) {
-        productService.handleDeleteProduct(productEvent);
-    }
+   
 }
